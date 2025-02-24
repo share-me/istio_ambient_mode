@@ -1,0 +1,19 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: debug-ap-myecho-post
+  namespace: stubborn-ambient
+spec:
+  targetRefs:
+  - kind: Gateway
+    group: gateway.networking.k8s.io
+    name: mywaypoint
+
+  action: ALLOW
+  rules:
+  - to:
+    - operation:
+        methods: ["POST"]
+        ports: ["8080"] # pod port
+...
