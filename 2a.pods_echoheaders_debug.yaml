@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debug-opsutils
+  namespace: stubborn-ambient
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opsutils
+  template:
+    metadata:
+      labels:
+        app: opsutils
+        version: "99"
+    spec:
+      containers:
+      - name: ops
+        image: alpine/curl:latest
+
+        command:
+        - sleep
+        - "36000"
+
+      restartPolicy: Always
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debug-deploy-myecho
+  namespace: stubborn-ambient
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myecho
+  template:
+    metadata:
+      labels:
+        app: myecho
+
+        tier: front
+        version: "35"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: myecho
+          image: mendhak/http-https-echo:35
+          ports:
+          - { name: http-native, containerPort: 8080 }
+...
